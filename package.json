@@ -1,0 +1,13 @@
+{
+    "name": "tumblr-photo-bot",
+    "version": "1.0.0",
+    "description": "A Discord bot for fetching photos from Tumblr.",
+    "main": "bot.js",
+    "repository": "git@github.com:Colbydude/Discord-Tumblr-Photo-Bot.git",
+    "author": "Colby Terry",
+    "license": "MIT",
+    "dependencies": {
+        "discord.io": "github:woor/discord.io#gateway_v6",
+        "winston": "^2.3.1"
+    }
+}
