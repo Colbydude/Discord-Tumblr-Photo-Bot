@@ -1,6 +1,7 @@
 let Discord = require('discord.js');
 let logger = require('winston');
 let auth = require('./auth.json');
+let axios = require('axios');
 
 // Configure logger settings.
 logger.remove(logger.transports.Console);
@@ -27,7 +28,39 @@ bot.on('message', message => {
         switch (cmd) {
             // !tumblr
             case 'tumblr':
-                //
+                axios.get('https://api.tumblr.com/v2/tagged', {
+                    params: {
+                        api_key: auth.api_key,
+                        limit: 10,
+                        tag: args[0]
+                    }
+                })
+                .then(response => {
+                    let posts = response.data.response;
+                    let post = null;
+
+                    // Go through the posts in the response until we reach a photo post.
+                    for (var i = 0; i < posts.length; i++) {
+                        if (posts[i].type == 'photo') {
+                            post = posts[i];
+                            break;
+                        }
+                    }
+
+                    // If post is still null, show error.
+                    if (post == null) {
+                        message.channel.send('No photos found for tag: ' + args[0]);
+                        logger.warning('No photos found for tag: ' + args[0]);
+
+                        return;
+                    }
+
+                    // Otherwise, post the photo.
+                    message.channel.send(post.photos[0].original_size.url);
+                })
+                .catch(error => {
+                    logger.error(error);
+                });
             break;
         }
     }
