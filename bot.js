@@ -27,35 +27,39 @@ bot.on('message', message => {
         switch (cmd) {
             // !tumblr
             case 'tumblr':
+                let tag = args.join('+');
+
                 axios.get('https://api.tumblr.com/v2/tagged', {
                     params: {
                         api_key: process.env.TUMBLR_API_KEY,
-                        limit: 10,
-                        tag: args[0]
+                        limit: 20,
+                        tag: tag
                     }
                 })
                 .then(response => {
-                    let posts = response.data.response;
+                    let posts = [];
                     let post = null;
 
-                    // Go through the posts in the response until we reach a photo post.
-                    for (var i = 0; i < posts.length; i++) {
-                        if (posts[i].type == 'photo') {
-                            post = posts[i];
-                            break;
+                    // Get all the photo posts from the response.
+                    response.data.response.forEach(post => {
+                        if (post.type == 'photo') {
+                            posts.push(post);
                         }
-                    }
+                    });
+
+                    // Get a random post from our list of photo posts.
+                    post = posts[getRandomInt(0, posts.length - 1)];
 
                     // If post is still null, show error.
-                    if (post == null) {
-                        message.channel.send('No photos found for tag: ' + args[0]);
-                        logger.warning('No photos found for tag: ' + args[0]);
+                    if (posts == [] || post == null) {
+                        message.channel.send('No photos found for tag: ' + tag);
+                        logger.warning('No photos found for tag: ' + tag);
 
                         return;
                     }
 
                     // Otherwise, post the photo.
-                    logger.info('Tag: ' + args[0] +', Photo: ' + post.photos[0].original_size.url);
+                    logger.info('Tag: ' + tag +', Photo: ' + post.photos[0].original_size.url);
                     message.channel.send(post.photos[0].original_size.url);
                 })
                 .catch(error => {
@@ -68,3 +72,19 @@ bot.on('message', message => {
 
 // Connect the bot.
 bot.login(process.env.DISCORD_TOKEN);
+
+/**
+ * Get a random integer from the given range.
+ * NOTE: The maximum is exclusive and the minimum is inclusive.
+ *
+ * @param  int  min
+ * @param  int  max
+ * @return int
+ */
+function getRandomInt(min, max)
+{
+    min = Math.ceil(min);
+    max = Math.floor(max);
+
+    return Math.floor(Math.random() * (max - min)) + min;
+}
