@@ -53,7 +53,7 @@ bot.on('message', message => {
                     // If post is still null, show error.
                     if (posts == [] || post == null) {
                         message.channel.send('No photos found for tag: ' + tag);
-                        logger.warning('No photos found for tag: ' + tag);
+                        logger.warn('No photos found for tag: ' + tag);
 
                         return;
                     }
