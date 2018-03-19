@@ -1,6 +1,5 @@
 let Discord = require('discord.js');
 let logger = require('winston');
-let auth = require('./auth.json');
 let axios = require('axios');
 
 // Configure logger settings.
@@ -14,7 +13,7 @@ logger.level = 'debug';
 let bot = new Discord.Client();
 
 bot.on('ready', () => {
-    logger.info(`Logged in as ${bot.user.tag}!`);
+    logger.info('Logged in as ' + bot.user.tag + '!');
 });
 
 // Listen for messages.
@@ -30,7 +29,7 @@ bot.on('message', message => {
             case 'tumblr':
                 axios.get('https://api.tumblr.com/v2/tagged', {
                     params: {
-                        api_key: auth.api_key,
+                        api_key: process.env.TUMBLR_API_KEY,
                         limit: 10,
                         tag: args[0]
                     }
@@ -56,6 +55,7 @@ bot.on('message', message => {
                     }
 
                     // Otherwise, post the photo.
+                    logger.info('Tag: ' + args[0] +', Photo: ' + post.photos[0].original_size.url);
                     message.channel.send(post.photos[0].original_size.url);
                 })
                 .catch(error => {
@@ -67,4 +67,4 @@ bot.on('message', message => {
 });
 
 // Connect the bot.
-bot.login(auth.token);
+bot.login(process.env.DISCORD_TOKEN);
