@@ -7,7 +7,7 @@
     "author": "Colby Terry",
     "license": "MIT",
     "dependencies": {
-        "discord.io": "github:woor/discord.io#gateway_v6",
+        "discord.js": "^11.3.2",
         "winston": "^2.3.1"
     }
 }
