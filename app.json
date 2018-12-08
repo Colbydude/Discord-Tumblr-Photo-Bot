@@ -2,6 +2,6 @@
     "name": "Discord Tumblr Photo Bot",
     "description": "A Discord bot for fetching photos from Tumblr.",
     "repository": "https://github.com/Colbydude/Discord-Tumblr-Photo-Bot",
-    "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
+    "logo": "https://cdn.jsdelivr.net/gh/heroku/node-js-getting-started/public/node.svg",
     "image": "heroku/nodejs"
 }
