@@ -18,7 +18,7 @@
     },
     "homepage": "https://github.com/Colbydude/Discord-Tumblr-Photo-Bot/issues",
     "dependencies": {
-        "axios": "^1.6.0",
+        "axios": "^1.8.2",
         "discord.js": "^11.3.2",
         "winston": "^2.3.1"
     }
